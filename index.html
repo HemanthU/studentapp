@@ -3,120 +3,164 @@
 <head>
   <title>Student Registration</title>
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      font-family: 'Poppins', sans-serif;
-    }
+    * { font-family: 'Poppins', sans-serif; }
 
     body {
       margin: 0;
-      height: 100vh;
       background: linear-gradient(135deg, #667eea, #764ba2);
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 100vh;
     }
 
     .card {
       backdrop-filter: blur(15px);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       border-radius: 20px;
-      padding: 40px;
-      width: 320px;
+      padding: 30px;
+      width: 400px;
       color: white;
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
-    input {
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input, select {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
       border: none;
-      border-radius: 10px;
       outline: none;
       transition: 0.3s;
     }
 
-    input:focus {
+    input:focus, select:focus {
       transform: scale(1.05);
-      box-shadow: 0 0 10px #fff;
+      box-shadow: 0 0 10px white;
     }
 
     button {
       width: 100%;
       padding: 12px;
-      border: none;
       border-radius: 10px;
-      background: #00c6ff;
+      border: none;
       background: linear-gradient(to right, #00c6ff, #0072ff);
       color: white;
-      font-size: 16px;
       cursor: pointer;
       transition: 0.3s;
+      margin-top: 10px;
     }
 
     button:hover {
       transform: scale(1.08);
       box-shadow: 0 0 15px #00c6ff;
     }
-
-    button:active {
-      transform: scale(0.95);
-    }
-
   </style>
 </head>
 
 <body>
 
 <div class="card">
-  <h2>🎓 Register</h2>
+  <h2>🎓 Student Registration</h2>
 
-  <input type="text" id="name" placeholder="Enter Name">
-  <input type="number" id="age" placeholder="Enter Age">
-  <input type="text" id="course" placeholder="Enter Course">
+  <input type="text" id="name" placeholder="Full Name">
+  
+  <div class="row">
+    <input type="number" id="age" placeholder="Age">
+    <select id="gender">
+      <option value="">Gender</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <input type="text" id="phone" placeholder="Phone Number">
+  <input type="email" id="email" placeholder="Email">
+
+  <input type="text" id="course" placeholder="Course">
+  <input type="text" id="dept" placeholder="Department">
+
+  <select id="year">
+    <option value="">Year</option>
+    <option>1st</option>
+    <option>2nd</option>
+    <option>3rd</option>
+    <option>4th</option>
+  </select>
+
+  <input type="text" id="college" placeholder="College Name">
+
+  <div class="row">
+    <input type="text" id="city" placeholder="City">
+    <input type="text" id="state" placeholder="State">
+  </div>
 
   <button onclick="saveData()">Register</button>
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.2.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "YOUR_KEY",
-    authDomain: "YOUR_DOMAIN",
-    projectId: "YOUR_ID",
-    storageBucket: "YOUR_BUCKET",
-    messagingSenderId: "YOUR_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBBCqC4wlplOLrbTZtmNvwtjZa8pP3X6CM",
+    authDomain: "studentapp-6b481.firebaseapp.com",
+    projectId: "studentapp-6b481",
+    storageBucket: "studentapp-6b481.firebasestorage.app",
+    messagingSenderId: "788833624069",
+    appId: "1:788833624069:web:68e15df515ab9a25913c6c"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
   window.saveData = async function () {
-    const name = document.getElementById("name").value;
-    const age = document.getElementById("age").value;
-    const course = document.getElementById("course").value;
+    const data = {
+      name: name.value,
+      age: age.value,
+      gender: gender.value,
+      phone: phone.value,
+      email: email.value,
+      course: course.value,
+      department: dept.value,
+      year: year.value,
+      college: college.value,
+      city: city.value,
+      state: state.value,
+      createdAt: new Date()
+    };
 
-    await addDoc(collection(db, "students"), { name, age, course });
+    // Validation
+    for (let key in data) {
+      if (!data[key] && key !== "createdAt") {
+        alert("⚠️ Fill all fields");
+        return;
+      }
+    }
 
-    alert("✨ Registered Successfully!");
+    try {
+      await addDoc(collection(db, "students"), data);
+      alert("✅ Registered Successfully!");
+
+      document.querySelectorAll("input, select").forEach(el => el.value = "");
+    } catch (e) {
+      alert("Error: " + e);
+      console.log(e);
+    }
   };
 </script>
 
