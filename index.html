@@ -22,7 +22,7 @@
       background: rgba(255,255,255,0.1);
       border-radius: 20px;
       padding: 30px;
-      width: 400px;
+      width: 420px;
       color: white;
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
@@ -77,7 +77,7 @@
   <h2>🎓 Student Registration</h2>
 
   <input type="text" id="name" placeholder="Full Name">
-  
+
   <div class="row">
     <input type="number" id="age" placeholder="Age">
     <select id="gender">
@@ -129,27 +129,38 @@
   const db = getFirestore(app);
 
   window.saveData = async function () {
+
     const data = {
-      name: name.value,
-      age: age.value,
-      gender: gender.value,
-      phone: phone.value,
-      email: email.value,
-      course: course.value,
-      department: dept.value,
-      year: year.value,
-      college: college.value,
-      city: city.value,
-      state: state.value,
+      name: document.getElementById("name").value.trim(),
+      age: document.getElementById("age").value.trim(),
+      gender: document.getElementById("gender").value,
+      phone: document.getElementById("phone").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      course: document.getElementById("course").value.trim(),
+      department: document.getElementById("dept").value.trim(),
+      year: document.getElementById("year").value,
+      college: document.getElementById("college").value.trim(),
+      city: document.getElementById("city").value.trim(),
+      state: document.getElementById("state").value.trim(),
       createdAt: new Date()
     };
 
     // Validation
-    for (let key in data) {
-      if (!data[key] && key !== "createdAt") {
-        alert("⚠️ Fill all fields");
-        return;
-      }
+    if (
+      !data.name ||
+      !data.age ||
+      !data.gender ||
+      !data.phone ||
+      !data.email ||
+      !data.course ||
+      !data.department ||
+      !data.year ||
+      !data.college ||
+      !data.city ||
+      !data.state
+    ) {
+      alert("⚠️ Please fill all fields properly");
+      return;
     }
 
     try {
@@ -157,6 +168,7 @@
       alert("✅ Registered Successfully!");
 
       document.querySelectorAll("input, select").forEach(el => el.value = "");
+
     } catch (e) {
       alert("Error: " + e);
       console.log(e);
