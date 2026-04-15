@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Registration</title>
+</head>
+<body>
+
+<h2>Register Student</h2>
+
+<input type="text" id="name" placeholder="Name"><br><br>
+<input type="number" id="age" placeholder="Age"><br><br>
+<input type="text" id="course" placeholder="Course"><br><br>
+
+<button onclick="saveData()">Register</button>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.2.0/firebase-firestore.js";
+
+  // ✅ YOUR CONFIG (copied from Firebase)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBBCqC4wlp10LrbTZtmNvwtjZa8pP3X6CM",
+    authDomain: "studentapp-6b481.firebaseapp.com",
+    projectId: "studentapp-6b481",
+    storageBucket: "studentapp-6b481.firebasestorage.app",
+    messagingSenderId: "788833624069",
+    appId: "1:788833624069:web:68e15df515ab9a25913c6c"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Save function
+  window.saveData = async function () {
+    const name = document.getElementById("name").value;
+    const age = document.getElementById("age").value;
+    const course = document.getElementById("course").value;
+
+    try {
+      await addDoc(collection(db, "students"), {
+        name: name,
+        age: age,
+        course: course
+      });
+
+      alert("Registered Successfully!");
+    } catch (e) {
+      alert("Error: " + e);
+    }
+  };
+</script>
+
+</body>
+</html>
