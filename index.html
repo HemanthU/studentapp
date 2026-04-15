@@ -2,52 +2,121 @@
 <html>
 <head>
   <title>Student Registration</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      width: 320px;
+      color: white;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #fff;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #00c6ff;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+  </style>
 </head>
+
 <body>
 
-<h2>Register Student</h2>
+<div class="card">
+  <h2>🎓 Register</h2>
 
-<input type="text" id="name" placeholder="Name"><br><br>
-<input type="number" id="age" placeholder="Age"><br><br>
-<input type="text" id="course" placeholder="Course"><br><br>
+  <input type="text" id="name" placeholder="Enter Name">
+  <input type="number" id="age" placeholder="Enter Age">
+  <input type="text" id="course" placeholder="Enter Course">
 
-<button onclick="saveData()">Register</button>
+  <button onclick="saveData()">Register</button>
+</div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.2.0/firebase-firestore.js";
 
-  // ✅ YOUR CONFIG (copied from Firebase)
   const firebaseConfig = {
-    apiKey: "AIzaSyBBCqC4wlp10LrbTZtmNvwtjZa8pP3X6CM",
-    authDomain: "studentapp-6b481.firebaseapp.com",
-    projectId: "studentapp-6b481",
-    storageBucket: "studentapp-6b481.firebasestorage.app",
-    messagingSenderId: "788833624069",
-    appId: "1:788833624069:web:68e15df515ab9a25913c6c"
+    apiKey: "YOUR_KEY",
+    authDomain: "YOUR_DOMAIN",
+    projectId: "YOUR_ID",
+    storageBucket: "YOUR_BUCKET",
+    messagingSenderId: "YOUR_ID",
+    appId: "YOUR_APP_ID"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Save function
   window.saveData = async function () {
     const name = document.getElementById("name").value;
     const age = document.getElementById("age").value;
     const course = document.getElementById("course").value;
 
-    try {
-      await addDoc(collection(db, "students"), {
-        name: name,
-        age: age,
-        course: course
-      });
+    await addDoc(collection(db, "students"), { name, age, course });
 
-      alert("Registered Successfully!");
-    } catch (e) {
-      alert("Error: " + e);
-    }
+    alert("✨ Registered Successfully!");
   };
 </script>
 
